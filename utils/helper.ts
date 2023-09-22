@@ -13,10 +13,11 @@ export async function fetchData(endpoint: string) {
 export async function fetchLinks(id: string) {
   try {
     const response = await fetch(
-      `http://spicy-api.vercel.app/anime/zoro/watch?episodeId=${id}&server=vidcloud`
+      `http://spicy-api.vercel.app/anime/zoro/watch?episodeId=${id}&server=vidstreaming`
     );
     if (!response.ok) throw new Error("Failed to fetch data");
     const data = await response.json();
+    console.log(data)
     return data;
   } catch (error) {
     console.log(error);

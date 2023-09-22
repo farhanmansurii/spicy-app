@@ -9,8 +9,7 @@ export default async function EpisodeContainer(props: any) {
 
   return (
     <div className="mx-auto w-[94%]">
-      <div className="mx-4 my-4  text-2xl mt-10">Episodes</div>
-     
+    
       <EpisodePaginated episodes={episodes} />
     </div>
   );

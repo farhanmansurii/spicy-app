@@ -16,7 +16,12 @@ export default function RootLayout({
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <head />
+        <head>
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="apple-touch-icon" href="/icon.png"></link>
+          <meta name="theme-color" content="#e63946" />
+          <title>spicyanime</title>
+        </head>
         <body>
           <ThemeProvider
             attribute="class"
@@ -24,8 +29,6 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-     
-
             {children}
           </ThemeProvider>
         </body>

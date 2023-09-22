@@ -5,11 +5,8 @@ import { LucideYoutube } from "lucide-react";
 const Animedetails = (props: any) => {
   return (
     <>
-      <div
-      // style={{ backgroundImage: `url(${props.data.cover})` }}
-      // className="bg-cover bg-center   lg:h-[400px] h-[300px]   bg-hidden  lg:mx-auto"
-      >
-        <div className=" mt-10 lg:w-100">
+      <div className="  lg:mx-auto">
+        <div className="  py-4 lg:w-100 bg-gradient-to-b relative  from-[#121212] to-[#121212]/20 ">
           <div className="flex flex-col w-[96%]   lg:w-11/12 mx-auto gap-4 ">
             <div className="flex flex-row p-2 gap-4 ">
               <img
@@ -17,8 +14,8 @@ const Animedetails = (props: any) => {
                 src={props.data?.image}
                 className="w-[120px] h-full md:w-[200px] rounded"
               />
-            <div className="flex flex-col  justify-center gap-2">
-                <div className="flex  gap-5 text-2xl lg:text-5xl  font-damion  font-semibold line-clamp-3 ">
+              <div className="flex flex-col  justify-center gap-2">
+                <div className="flex py-2.5 gap-5 text-2xl lg:text-5xl  font-damion  font-semibold line-clamp-3 ">
                   {props.data.title.userPreferred ||
                     props.data.title.english ||
                     props.data.title.romaji ||
@@ -27,10 +24,12 @@ const Animedetails = (props: any) => {
                 <div className=" whitespace-normal gap-4 flex text-sm">
                   <p> {props.data.type || ""}</p>
                   <p> {props.data.startDate.year || ""}</p>
-                  <p> {props.data.status || ""}</p>
+                  {props.data.type.toLowerCase() !== "movie" && (
+                    <p> {props.data.status || ""}</p>
+                  )}
                   {props.data.rating ? (
                     <p className="flex whitespace-nowrap items-center gap-1">
-                      {props.data?.rating?.toFixed(1) * 0.1} / 10
+                      {(props.data?.rating * 0.1).toFixed(1)}/10
                     </p>
                   ) : (
                     ""

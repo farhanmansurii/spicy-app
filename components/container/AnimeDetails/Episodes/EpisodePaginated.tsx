@@ -1,86 +1,122 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import EpisodeCard from "./EpisodeCard";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useRouter, useSearchParams } from "next/navigation";
-import NowPlaying from "./NowPlaying";
+import OPlayer from "./Player";
+import EpisodeRangeSelector from "./EpisodeRangeSelector";
 import { fetchLinks } from "@/utils/helper";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function EpisodePaginated(props: any) {
+interface Episode {
+  id: string;
+  episode: number;
+  image: string;
+  title?: string;
+  number: number;
+  description?: string;
+}
+
+interface EpisodeListProps {
+  episodes: Episode[];
+}
+interface Range {
+  start: number;
+  end: number;
+}
+export default function EpisodeList(props: EpisodeListProps) {
   const { episodes } = props;
-  const episodesPerPage = 25;
 
-  const [range, setRange] = useState("1-25");
+  const [selectedEp, setSelectedEp] = useState<Episode | null>(null);
+  const [links, setLinks] = useState<{
+    sources: string[];
+    subtitles: string[];
+  }>({
+    sources: [],
+    subtitles: [],
+  });
 
-  const [selectedEp, setSelectedEp] = useState(null);
-  const [links, setlinks] = useState([]);
-  const availableRanges = [];
-  for (let i = 1; i <= episodes.length; i += episodesPerPage) {
-    const end = Math.min(i + episodesPerPage - 1, episodes.length);
-    availableRanges.push(`${i}-${end}`);
-  }
+  const [range, setRange] = useState<Range>({
+    start: 0,
+    end: 25,
+  });
 
-  useEffect(() => {
-    const start = episodesPerPage * (parseInt(range.split("-")[0]) - 1) + 1;
-    const end = start + episodesPerPage - 1;
-    const currentRange = `${start}-${end}`;
-    if (range !== currentRange) {
-      setRange(currentRange);
+  const totalEpisodes = episodes.length;
+
+  const toggleEP = async (ep: Episode) => {
+    setSelectedEp(ep);
+    try {
+      const link = await fetchLinks(ep.id);
+      setLinks(link);
+    } catch (error) {
+      console.error("Error fetching links:", error);
     }
+  };
+
+  const handleRangeChange = (newRange: string) => {
+    const [start, end] = newRange.split("-");
+    setRange({
+      start: parseInt(start) - 1,
+      end: parseInt(end),
+    });
+  };
+  useEffect(() => {
+    toggleEP(episodes[0]);
   }, [episodes]);
 
-  const handleRangeChange = (selectedRange: string) => {
-    setRange(selectedRange);
-  };
-
-  const [startStr, endStr] = range.split("-");
-  const start = parseInt(startStr, 10);
-  const end = parseInt(endStr, 10);
-  const visibleEpisodes = episodes.slice(start - 1, end);
-  const toggleEP = async (ep: any) => {
-    setSelectedEp(ep);
-    const link = await fetchLinks(ep.id);
-    setlinks(link);
-  };
   return (
     <div>
-      {selectedEp ? <NowPlaying episode={selectedEp} links={links} /> : ""}
-      {episodes.length > 26 && (
-        <Select>
-          <SelectTrigger className="w-[300px] rounded px-4 m-2">
-            <SelectValue placeholder="Select Episode Range" />
-          </SelectTrigger>
-          <SelectContent className="max-h-[300px] rounded border-primary overflow-y-auto">
-            <SelectGroup>
-              <SelectLabel>Episode Range</SelectLabel>
-              {availableRanges.map((availableRange) => (
-                <SelectItem
-                  key={availableRange}
-                  value={availableRange}
-                  onClick={() => handleRangeChange(availableRange)}
-                >
-                  {availableRange}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      {selectedEp && links?.sources?.length > 0 ? (
+        <OPlayer
+          key={selectedEp.id}
+          episode={selectedEp}
+          sources={links.sources}
+          subtitles={links.subtitles}
+        />
+      ) : (
+        <div className="aspect-video  w-full lg:w-[600px]  mx-auto my-10 flex justify-center items-center text-center">
+          <Skeleton className="w-full h-full" />
+        </div>
       )}
+
+      <div className="my-4 flex items-center mb-4  justify-between text-2xl mt-10">
+        <div>Episodes</div>
+        {episodes.length > 30 && (
+          <EpisodeRangeSelector
+            range={range}
+            handleRangeChange={handleRangeChange}
+            totalEpisodes={totalEpisodes}
+          />
+        )}
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-        {episodes.length > 26
-          ? visibleEpisodes.map((e: any, i: number) => (
-              <EpisodeCard active={toggleEP} episode={e} key={i} />
-            ))
-          : episodes.map((e: any, i: number) => (
-              <EpisodeCard active={toggleEP} episode={e} key={i} />
+        {episodes.length > 30
+          ? range.start < range.end
+            ? episodes
+                .slice(range.start, range.end || 25)
+                .map((e: Episode) => (
+                  <EpisodeCard
+                    activeID={selectedEp?.id}
+                    active={toggleEP}
+                    episode={e}
+                    key={e.id}
+                  />
+                ))
+            : episodes
+                .slice(range.start - 1, range.end)
+                .map((e: Episode) => (
+                  <EpisodeCard
+                    activeID={selectedEp?.id}
+                    active={toggleEP}
+                    episode={e}
+                    key={e.id}
+                  />
+                ))
+          : episodes.map((e: Episode) => (
+              <EpisodeCard
+                activeID={selectedEp?.id}
+                active={toggleEP}
+                episode={e}
+                key={e.id}
+              />
             ))}
       </div>
     </div>
