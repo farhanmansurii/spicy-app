@@ -1,4 +1,4 @@
-const baseUrl = "http://spicy-api.vercel.app/meta/anilist/";
+const baseUrl = "https://spicy-api.vercel.app/meta/anilist/";
 export async function fetchData(endpoint: string) {
   try {
     const url = new URL(endpoint, baseUrl);
@@ -13,7 +13,7 @@ export async function fetchData(endpoint: string) {
 export async function fetchLinks(id: string) {
   try {
     const response = await fetch(
-      `http://spicy-api.vercel.app/anime/zoro/watch?episodeId=${id}&server=vidstreaming`
+      `https://spicy-api.vercel.app/anime/zoro/watch?episodeId=${id}&server=vidstreaming`
     );
     if (!response.ok) throw new Error("Failed to fetch data");
     const data = await response.json();
