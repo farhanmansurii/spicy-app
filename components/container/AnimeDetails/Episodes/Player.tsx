@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from "react";
 import Player from "@oplayer/core";
 import OUI from "@oplayer/ui";
 import OHls from "@oplayer/hls";
-import { chromecast, vttThumbnails } from "@oplayer/plugins";
 type Ctx = {
   ui: ReturnType<typeof OUI>;
   hls: ReturnType<typeof OHls>;
@@ -51,8 +50,6 @@ export default function OPlayer({
       },
     }),
     OHls(),
-    chromecast,
-    vttThumbnails,
   ];
 
   useEffect(() => {
