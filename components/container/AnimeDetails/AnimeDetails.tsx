@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { formatNextAiringEpisode } from "@/utils/helper";
 import { LucideYoutube } from "lucide-react";
 import parse from "html-react-parser";
+import ShowDescription from "./Episodes/ShowDescription";
 const Animedetails = (props: any) => {
   return (
     <>
@@ -22,7 +23,7 @@ const Animedetails = (props: any) => {
                     props.data.title.romaji ||
                     ""}
                 </div>
-                <div className=" whitespace-normal upp gap-4 flex text-sm">
+                <div className=" whitespace-normal  gap-4 flex text-sm">
                   <p className="">
                     {props.data.type === "MOVIE"
                       ? "Movie"
@@ -41,31 +42,14 @@ const Animedetails = (props: any) => {
                     ""
                   )}
                 </div>
-                <div>
-                  <p className="overflow-scroll h-[50px] lg:h-[130px] text-xs">
-                    {parse(props.data.description)}
-                  </p>
+                <div className="flex flex-wrap  gap-x-4 gap-y-2 mt-2 whitespace-normal text-xs">
+                  {props.data.genres.map((genre: string, i: number) => (
+                    <div className="" key={i}>{genre}</div>
+                  ))}
                 </div>
               </div>
             </div>
-            <div className="flex gap-2">
-              {props.data.nextAiringEpisode && (
-                <Button variant="secondary" className=" w-fit text-xs">
-                  {formatNextAiringEpisode(props.data.nextAiringEpisode)}
-                </Button>
-              )}
-              {props.data.trailer && (
-                <a
-                  href={`https://www.youtube.com/embed/${props.data.trailer.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button className="w-fit text-xs">
-                    <LucideYoutube className="p-1" /> Trailer
-                  </Button>
-                </a>
-              )}
-            </div>
+            <ShowDescription data={props.data} />
           </div>
         </div>
       </div>

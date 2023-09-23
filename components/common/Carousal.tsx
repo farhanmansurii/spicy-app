@@ -1,8 +1,5 @@
 import { fetchData } from "@/utils/helper";
-import { Play, Plus } from "lucide-react";
-import Link from "next/link";
 import React from "react";
-import { Button } from "../ui/button";
 
 export default async function Carousal() {
   const res = await fetchData("trending");
@@ -40,9 +37,9 @@ export default async function Carousal() {
         <div className="mx-auto text-left text-4xl my-1 lg:text-5xl w-full capitalize">
           {data.title.english || data.title.userPreferred || ""}
         </div>
-        <div className="text-sm  opacity-50 lg:block capitalize line-clamp-3 lg:line-clamp-4 w-10/12">
-          {/* {data.description && data.description} */}
-        </div>
+        {/* <div className="text-sm  opacity-50 lg:block capitalize line-clamp-3 lg:line-clamp-4 w-10/12">
+          {data.description && data.description}
+        </div> */}
         <div className="flex pt-2 gap-3">
           <div className="rounded-full p-2.5 bg-primary">
             <svg
