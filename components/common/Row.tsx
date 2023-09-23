@@ -4,6 +4,7 @@ import AnimeCard from "./Card";
 import React, { useRef } from "react";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import useAnimeStore from "@/store/animeStore";
 
 interface Anime {
   id: number;
@@ -27,6 +28,8 @@ interface RowProps {
 
 const Row: React.FC<RowProps> = ({ typeOfAnime, text }) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const { recentlyWatched, addToRecentlyWatched } = useAnimeStore();
+
 
   const scrollTo = (scrollOffset: number) => {
     if (scrollContainerRef.current) {
@@ -50,14 +53,14 @@ const Row: React.FC<RowProps> = ({ typeOfAnime, text }) => {
         <div className="flex gap-3">
           <Button
             variant="secondary"
-            onClick={() => scrollTo(-400)} 
+            onClick={() => scrollTo(-400)}
             className=" rounded-md p-3"
           >
             <ChevronLeft />
           </Button>
           <Button
             variant="secondary"
-            onClick={() => scrollTo(200)} 
+            onClick={() => scrollTo(200)}
             className=" rounded-md p-3"
           >
             <ChevronRight />
@@ -75,7 +78,10 @@ const Row: React.FC<RowProps> = ({ typeOfAnime, text }) => {
         }}
       >
         {typeOfAnime?.map((e) => (
-          <Link href={`/anime/${e.id}`} key={e.id}>
+          <Link
+            href={`/anime/${e.id}`}
+            key={e.id}
+          >
             <AnimeCard
               key={e.id}
               animeImg={e.image || e.coverImage.large}

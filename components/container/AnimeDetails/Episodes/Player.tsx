@@ -22,6 +22,7 @@ export default function OPlayer({
   const englishSubtitles = subtitles.filter(
     (subtitle) => subtitle.lang.toLowerCase() === "english"
   );
+  const titleToDisplay = title !== "Full" ? `E${episode.number} ${title}` : "";
 
   const subtitlesList = englishSubtitles.map((subtitle, index) => ({
     src: subtitle.url,
@@ -66,7 +67,11 @@ export default function OPlayer({
     if (!oplayer) return;
     oplayer.context.ui.menu.unregister("Source");
     oplayer
-      .changeSource({ src: sources[0].url, poster: image, title: title })
+      .changeSource({
+        src: sources[0].url,
+        poster: image,
+        title: titleToDisplay,
+      })
       .catch((err) => console.log(err));
     oplayer.context.ui.subtitle?.changeSource(subtitlesList);
   }, [sources, subtitles]);

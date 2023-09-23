@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { formatNextAiringEpisode } from "@/utils/helper";
 import { LucideYoutube } from "lucide-react";
-
+import parse from "html-react-parser";
 const Animedetails = (props: any) => {
   return (
     <>
@@ -22,8 +22,13 @@ const Animedetails = (props: any) => {
                     props.data.title.romaji ||
                     ""}
                 </div>
-                <div className=" whitespace-normal gap-4 flex text-sm">
-                  <p> {props.data.type || ""}</p>
+                <div className=" whitespace-normal upp gap-4 flex text-sm">
+                  <p className="">
+                    {props.data.type === "MOVIE"
+                      ? "Movie"
+                      : props.data.type || ""}
+                  </p>
+
                   <p> {props.data.startDate.year || ""}</p>
                   {props.data.type.toLowerCase() !== "movie" && (
                     <p> {props.data.status || ""}</p>
@@ -37,8 +42,8 @@ const Animedetails = (props: any) => {
                   )}
                 </div>
                 <div>
-                  <p className="overflow-scroll h-[50px] lg:h-fit text-xs">
-                    {props.data.description}
+                  <p className="overflow-scroll h-[50px] lg:h-[130px] text-xs">
+                    {parse(props.data.description)}
                   </p>
                 </div>
               </div>

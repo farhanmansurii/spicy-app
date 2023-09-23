@@ -12,7 +12,7 @@ interface Episode {
 interface EpisodeCardProps {
   episode: any;
   active: any;
-  activeID: any ;
+  activeID: any;
 }
 
 export default function EpisodeCard(props: EpisodeCardProps) {
@@ -36,12 +36,13 @@ export default function EpisodeCard(props: EpisodeCardProps) {
       </div>
 
       <div className="episode-info absolute text-left bottom-2 w-full px-4">
-        <div className="text-xs w-fit lg:text-md bg-primary/80 text-white px-3 mb-1 py-1 rounded">
+        <div className="text-[12px] w-fit lg:text-md bg-primary/80 text-white px-2 mb-1  py-[2px] rounded">
           E{episode?.number}
         </div>
-        <h3 className="text-md lg:text-lg line-clamp-1">
-          {episode?.title && episode.title}
+        <h3 className="text-xs lg:text-lg line-clamp-2">
+          {episode?.title !== "Full" ? episode?.title : ""}
         </h3>
+
         <h3 className="text-xs lg:text-md opacity-70 line-clamp-2">
           {episode?.description}
         </h3>

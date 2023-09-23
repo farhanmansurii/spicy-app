@@ -10,21 +10,14 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { fetchData } from "@/utils/helper";
-import { Search, SearchIcon } from "lucide-react";
+import { CommandIcon, Search, SearchIcon } from "lucide-react";
 import Link from "next/link";
-
-interface SearchResult {
-  id: string;
-  title: {
-    english: string;
-    userPreferred: string;
-  };
-}
+import useAnimeStore from "@/store/animeStore";
 
 export function SearchBar() {
   const [open, setOpen] = React.useState(false);
   const [term, setTerm] = React.useState("");
-  const [results, setResults] = React.useState<SearchResult[]>([]);
+  const [results, setResults] = React.useState<Anime[]>([]);
 
   // Throttle the search by using a flag
   const searchInProgress = React.useRef(false);
@@ -44,7 +37,15 @@ export function SearchBar() {
       searchInProgress.current = false;
     }
   };
+  const { recentlySearched, loadRecentlySearched, addToRecentlySearched } =
+    useAnimeStore();
+  React.useEffect(() => {
+    loadRecentlySearched();
+  }, []);
 
+  const handleAddToHistory = (anime: Anime) => {
+    addToRecentlySearched(anime);
+  };
   const down = (e: React.KeyboardEvent) => {
     if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
@@ -56,26 +57,27 @@ export function SearchBar() {
     const newTerm = e.target.value;
     setTerm(newTerm);
 
-    // Throttle the search by checking if a previous search is in progress
     if (!searchInProgress.current) {
       handleSearch(newTerm);
     }
   };
 
+  const toggleOpen = () => {
+    setOpen((prev) => !prev);
+    setResults([]);
+    setTerm("");
+  };
   return (
     <>
       <div
-        onClick={() => setOpen(true)}
+        onClick={() => toggleOpen()}
         className="bg-primary rounded-full p-2.5"
       >
         <SearchIcon />
       </div>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={open} onOpenChange={toggleOpen}>
         <form>
-          <div
-            className="flex items-center border-b  border-primary/30 px-3"
-            cmdk-input-wrapper=""
-          >
+          <div className="flex items-center border-b  border-primary/30 px-3">
             <Search className="mr-2 h-4 w-4 text-primary shrink-0 " />
 
             <input
@@ -86,33 +88,56 @@ export function SearchBar() {
               }
             />
           </div>
+        </form>
 
-          <CommandList>
-            {results.length === 0 ? (
+        <CommandList className=" pb-1.5">
+          {term.length > 0 ? (
+            results.length === 0 ? (
               <CommandEmpty>No results found.</CommandEmpty>
             ) : (
               <>
-                <CommandGroup heading="Suggestions"></CommandGroup>
                 <CommandSeparator />
-                <CommandGroup heading="Top Results">
+                <CommandGroup className=" " heading="Top Results">
                   {results.map((result, index) => (
-                    <CommandItem key={result.id}>
-                      <Link
-                        onClick={() => {
-                          setOpen(false);
-                          setResults([]);
-                        }}
-                        href={`/anime/${result.id}`}
-                      >
+                    <Link
+                      key={result.id}
+                      onClick={() => {
+                        handleAddToHistory(result);
+                        toggleOpen();
+                      }}
+                      href={`/anime/${result.id}`}
+                    >
+                      <CommandItem>
                         {result.title.english || result.title.userPreferred}
-                      </Link>
-                    </CommandItem>
+                      </CommandItem>
+                    </Link>
                   ))}
                 </CommandGroup>
               </>
-            )}
-          </CommandList>
-        </form>
+            )
+          ) : (
+            <>
+              {recentlySearched.length > 0 && (
+                <CommandGroup heading="Recent Searches">
+                  {recentlySearched.map((result) => (
+                    <Link
+                      key={result.id}
+                      onClick={() => {
+                        handleAddToHistory(result);
+                        toggleOpen();
+                      }}
+                      href={`/anime/${result.id}`}
+                    >
+                      <CommandItem>
+                        {result.title.english || result.title.userPreferred}
+                      </CommandItem>
+                    </Link>
+                  ))}
+                </CommandGroup>
+              )}
+            </>
+          )}
+        </CommandList>
       </CommandDialog>
     </>
   );

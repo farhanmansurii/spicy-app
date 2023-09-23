@@ -23,7 +23,16 @@ export default async function AnimeDetailPage(props: AnimeDetailPageProps) {
       />
       <Animedetails data={data} />
 
-      <EpisodeContainer id={props.id} fetchFiller={true} />
+      <EpisodeContainer
+        animeTitle={
+          data.title.userPreferred ||
+          data.title.english ||
+          data.title.romaji ||
+          ""
+        }
+        id={props.id}
+        fetchFiller={true}
+      />
     </div>
   );
 }

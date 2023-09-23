@@ -5,26 +5,20 @@ import OPlayer from "./Player";
 import EpisodeRangeSelector from "./EpisodeRangeSelector";
 import { fetchLinks } from "@/utils/helper";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface Episode {
-  id: string;
-  episode: number;
-  image: string;
-  title?: string;
-  number: number;
-  description?: string;
-}
+import useAnimeStore from "@/store/animeStore";
 
 interface EpisodeListProps {
   episodes: Episode[];
+  animeID: string;
+  animeTitle: string;
 }
 interface Range {
   start: number;
   end: number;
 }
-export default function EpisodeList(props: EpisodeListProps) {
-  const { episodes } = props;
 
+export default function EpisodeList(props: EpisodeListProps) {
+  const { episodes, animeID, animeTitle } = props;
   const [selectedEp, setSelectedEp] = useState<Episode | null>(null);
   const [links, setLinks] = useState<{
     sources: string[];
@@ -43,11 +37,12 @@ export default function EpisodeList(props: EpisodeListProps) {
 
   const toggleEP = async (ep: Episode) => {
     setSelectedEp(ep);
+    if (ep?.number > 1) handleAddToRecentlyWatched(ep);
     try {
       const link = await fetchLinks(ep.id);
       setLinks(link);
     } catch (error) {
-      console.error("Error fetching links:", error);
+      console.log("Error fetching links:", error);
     }
   };
 
@@ -58,10 +53,21 @@ export default function EpisodeList(props: EpisodeListProps) {
       end: parseInt(end),
     });
   };
+  const { recentlyWatched, addToRecentlyWatched } = useAnimeStore();
+
+  const animeInRecentlyWatched = recentlyWatched.find(
+    (anime) => anime.animeID === animeID
+  );
+
   useEffect(() => {
-    toggleEP(episodes[0]);
+    if (animeInRecentlyWatched)
+      toggleEP(episodes[animeInRecentlyWatched.number - 1]);
+    else toggleEP(episodes[0]);
   }, [episodes]);
 
+  const handleAddToRecentlyWatched = (anime: Episode) => {
+    addToRecentlyWatched({ animeID, animeTitle, ...anime });
+  };
   return (
     <div>
       {selectedEp && links?.sources?.length > 0 ? (
@@ -78,7 +84,7 @@ export default function EpisodeList(props: EpisodeListProps) {
       )}
 
       <div className="my-4 flex items-center mb-4  justify-between text-2xl mt-10">
-        <div>Episodes</div>
+        {episodes.length > 1 && <div>Episodes</div>}
         {episodes.length > 30 && (
           <EpisodeRangeSelector
             range={range}
@@ -87,38 +93,40 @@ export default function EpisodeList(props: EpisodeListProps) {
           />
         )}
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-        {episodes.length > 30
-          ? range.start < range.end
-            ? episodes
-                .slice(range.start, range.end || 25)
-                .map((e: Episode) => (
-                  <EpisodeCard
-                    activeID={selectedEp?.id}
-                    active={toggleEP}
-                    episode={e}
-                    key={e.id}
-                  />
-                ))
-            : episodes
-                .slice(range.start - 1, range.end)
-                .map((e: Episode) => (
-                  <EpisodeCard
-                    activeID={selectedEp?.id}
-                    active={toggleEP}
-                    episode={e}
-                    key={e.id}
-                  />
-                ))
-          : episodes.map((e: Episode) => (
-              <EpisodeCard
-                activeID={selectedEp?.id}
-                active={toggleEP}
-                episode={e}
-                key={e.id}
-              />
-            ))}
-      </div>
+      {episodes.length > 1 && (
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+          {episodes.length > 30
+            ? range.start < range.end
+              ? episodes
+                  .slice(range.start, range.end || 25)
+                  .map((e: Episode) => (
+                    <EpisodeCard
+                      activeID={selectedEp?.id}
+                      active={toggleEP}
+                      episode={e}
+                      key={e.id}
+                    />
+                  ))
+              : episodes
+                  .slice(range.start - 1, range.end)
+                  .map((e: Episode) => (
+                    <EpisodeCard
+                      activeID={selectedEp?.id}
+                      active={toggleEP}
+                      episode={e}
+                      key={e.id}
+                    />
+                  ))
+            : episodes.map((e: Episode) => (
+                <EpisodeCard
+                  activeID={selectedEp?.id}
+                  active={toggleEP}
+                  episode={e}
+                  key={e.id}
+                />
+              ))}
+        </div>
+      )}
     </div>
   );
 }
