@@ -13,15 +13,24 @@ import { fetchData } from "@/utils/helper";
 import { CommandIcon, Search, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import useAnimeStore from "@/store/animeStore";
+import { DebouncedInput } from "./DebouncedInput";
 
 export function SearchBar() {
   const [open, setOpen] = React.useState(false);
   const [term, setTerm] = React.useState("");
   const [results, setResults] = React.useState<Anime[]>([]);
-
+  const [loading, setLoading] = React.useState<boolean>(false);
   // Throttle the search by using a flag
   const searchInProgress = React.useRef(false);
-
+  async function searchShowsByQuery(value: string) {
+    setTerm(value);
+    setLoading(true);
+    if (value.length >= 3) {
+      const shows = await fetchData(`advanced-search?query=${value}`);
+      setResults(shows.results);
+    }
+    setLoading(false);
+  }
   const handleSearch = async (searchTerm: string) => {
     if (searchInProgress.current) {
       return;
@@ -46,21 +55,6 @@ export function SearchBar() {
   const handleAddToHistory = (anime: Anime) => {
     addToRecentlySearched(anime);
   };
-  const down = (e: React.KeyboardEvent) => {
-    if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      setOpen((open) => !open);
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTerm = e.target.value;
-    setTerm(newTerm);
-
-    if (!searchInProgress.current) {
-      handleSearch(newTerm);
-    }
-  };
 
   const toggleOpen = () => {
     setOpen((prev) => !prev);
@@ -78,22 +72,23 @@ export function SearchBar() {
       <CommandDialog open={open} onOpenChange={toggleOpen}>
         <form>
           <div className="flex items-center border-b  border-primary/30 px-3">
-            <Search className="mr-2 h-4 w-4 text-primary shrink-0 " />
-
-            <input
+            <DebouncedInput
+              setQuery={setTerm}
+              setData={setResults}
+              onChange={(value) => void searchShowsByQuery(value.toString())}
               value={term}
-              onChange={(e) => handleInputChange(e)}
-              className={
-                "flex h-14 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-              }
             />
           </div>
         </form>
 
-        <CommandList className=" pb-1.5">
+        <CommandList className=" ">
           {term.length > 0 ? (
             results.length === 0 ? (
-              <CommandEmpty>No results found.</CommandEmpty>
+              loading ? (
+                <CommandEmpty>Loading</CommandEmpty>
+              ) : (
+                <CommandEmpty>No results found.</CommandEmpty>
+              )
             ) : (
               <>
                 <CommandSeparator />

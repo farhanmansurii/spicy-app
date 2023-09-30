@@ -2,7 +2,9 @@ const baseUrl = "https://spicy-api.vercel.app/meta/anilist/";
 export async function fetchData(endpoint: string) {
   try {
     const url = new URL(endpoint, baseUrl);
-    const response = await fetch(url.toString());
+    const response = await fetch(url.toString(), {
+      next: { revalidate: 3600 },
+    });
     if (!response.ok) throw new Error("Failed to fetch data");
     const data = await response.json();
     return data;
@@ -13,7 +15,8 @@ export async function fetchData(endpoint: string) {
 export async function fetchLinks(id: string) {
   try {
     const response = await fetch(
-      `https://spicy-api.vercel.app/anime/zoro/watch?episodeId=${id}&server=vidstreaming`
+      `https://spicy-api.vercel.app/anime/zoro/watch?episodeId=${id}&server=vidstreaming`,
+      { next: { revalidate: 3600 } }
     );
     if (!response.ok) throw new Error("Failed to fetch data");
     const data = await response.json();

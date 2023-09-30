@@ -5,7 +5,7 @@ export default async function Carousal() {
   const res = await fetchData("trending");
   const data = res.results[9];
   return (
-    <div className="w-full relative -z-10   h-[280px] lg:h-[300px]  ">
+    <div className="w-full relative -z-10   h-[400px]  ">
       <div
         className="absolute inset-0 bottom-0 bg-gradient-to-t from-[#121212]
        to-transparent"

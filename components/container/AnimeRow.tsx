@@ -7,6 +7,6 @@ interface AnimeListProps {
 }
 
 export default async function AnimeRow(props: AnimeListProps) {
-  const animedata = await fetchData(props.endpoint);
+  const animedata = await fetchData(props.endpoint)
   return <Row text={props.text} typeOfAnime={animedata?.results} />;
 }
