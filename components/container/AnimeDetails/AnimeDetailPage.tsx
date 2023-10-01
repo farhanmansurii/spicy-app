@@ -31,8 +31,8 @@ export default async function AnimeDetailPage(props: AnimeDetailPageProps) {
           text="Similar"
           typeOfAnime={data.relations.filter(
             (relation: any) =>
-              relation.type.toLowerCase() === "tv" ||
-              relation.type.toLowerCase() === "movie"
+              relation?.type?.toLowerCase() === "tv" ||
+              relation?.type?.toLowerCase() === "movie"
           )}
         />
       </div>
