@@ -16,7 +16,7 @@ interface AnimeStore {
 }
 
 const useAnimeStore = create<AnimeStore>((set) => ({
-  recentlyWatched: [],
+recentlyWatched: [],
   recentlySearched: [],
   addToRecentlyWatched: async (anime) => {
     await addRecentlyWatched(anime);

@@ -23,15 +23,13 @@ export default function RootLayout({
           <meta name="theme-color" content="#e63946" />
           <title>spicyanime</title>
         </head>
-        <body>
+        <body className="bg-background">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            enableSystem
             disableTransitionOnChange
           >
             {children}
-            <Footer/>
           </ThemeProvider>
         </body>
       </html>

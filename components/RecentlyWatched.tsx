@@ -32,23 +32,24 @@ export default function RecentlyWatched() {
         >
           <h2 className="text-2xl lg:text-3xl my-2 mx-2">Continue Watching</h2>
           <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              onClick={() => scrollTo(-400)}
-              className=" rounded-md p-3"
-            >
-              <ChevronLeft />
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => scrollTo(200)}
-              className=" rounded-md p-3"
-            >
-              <ChevronRight />
-            </Button>
-          </div>
+          <Button
+          size='sm'
+            onClick={() => scrollTo(-400)}
+            className=" rounded-full w-8 h-8 p-2"
+          >
+            <ChevronLeft />
+          </Button>
+          <Button
+            size='sm'
+            onClick={() => scrollTo(400)}
+            className=" rounded-full w-8 h-8 p-2"
+          >
+            <ChevronRight />
+          </Button>
+        </div>
         </div>
         <div
+        ref={scrollContainerRef}
           style={{
             display: "flex",
             overflowX: "scroll",

@@ -6,40 +6,32 @@ import Navbar from "./Navbar";
 const AnimeDetailsSkeleton = () => {
   return (
     <>
-      <Navbar text="" />
-      <div className="w-[94%] mx-auto">
-        <div className="py-4 lg:w-100 ">
-          <div className="flex flex-col  lg:w-11/12 mx-auto gap-4 ">
-            <div className="flex flex-row p-2 gap-4 ">
-              <Skeleton className="w-[120px]   h-[180px] lg:h-[300px] md:w-[200px]" />
-
-              <div className="flex flex-col justify-center gap-2">
-                <Skeleton className="lg:w-[300px] h-8 lg:h-12" />
-                <Skeleton className="w-24 h-6  lg:h-10" />
-                <Skeleton className="w-44 lg:w-[500px] h-12 lg:h-24" />
-              </div>
+      <div className="lg:mx-auto">
+        <div className="pb-4 lg:w-100">
+          <div className="flex flex-col w-full mx-auto gap-4">
+            <div className="relative w-full h-full z-30">
+              <Skeleton className="z-0 w-full bg-background aspect-video h-full md:h-[350px]" />
             </div>
-            <div className="flex gap-2">
-              <Button variant="secondary" className="w-fit text-xs">
-                <Skeleton className="w-20 h-4" />
-              </Button>
-              <Button className=" w-20 text-xs"></Button>
+            <div className="w-[90%] flex flex-col mx-auto">
+              <div className="flex flex-row p-2 gap-4">
+                <div className="flex flex-col justify-center gap-2">
+                  <div className="flex gap-4 items-center">
+                    <Skeleton className="text-4xl h-[3.2rem]  font-bold lg:text-5xl w-64 " />
+                    <Button size="sm"></Button>
+                  </div>
+                  <div className="flex flex-wrap h-6 gap-2">
+                    <Skeleton className="w-8 " />
+                    <Skeleton className="w-32" />
+                    <Skeleton className="w-24 " />
+                  </div>
+                  <Skeleton className="text-sm h-16 " />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="aspect-video  w-full lg:w-[600px]  mx-auto my-10 flex justify-center items-center text-center">
-          <Skeleton className="w-full h-full" />
-        </div>
-        <Skeleton className="w-36 mb-4 h-10" />
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-          {Array.from({ length: 6 }, (_, index) => (
-            <Skeleton
-              className="aspect-video rounded-none"
-              key={index}
-            /> 
-          ))}
-        </div>
       </div>
+      <Skeleton className="aspect-video  w-11/12 mx-auto lg:w-[600px] h-full" />
     </>
   );
 };

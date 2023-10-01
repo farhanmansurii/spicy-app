@@ -24,7 +24,7 @@ export default function OPlayer({
   );
   const titleToDisplay = title !== "Full" ? `E${episode.number} ${title}` : "";
 
-  const subtitlesList = englishSubtitles.map((subtitle, index) => ({
+  const subtitlesList = subtitles.map((subtitle, index) => ({
     src: subtitle.url,
     default: index === 0,
     name: subtitle.lang,
@@ -107,8 +107,8 @@ export default function OPlayer({
         poster: image,
         title: titleToDisplay,
       })
+      .then(() => oplayer.context.ui.subtitle.changeSource(subtitlesList))
       .catch((err) => console.log(err));
-    oplayer.context.ui.subtitle?.changeSource(subtitlesList);
   }, [sources, subtitles]);
 
   return (

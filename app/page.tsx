@@ -6,7 +6,6 @@ import AnimeList from "@/components/container/AnimeRow";
 export default function Home() {
   return (
     <div>
-      <Navbar />
       <CarousalCard />
       <RecentlyWatched />
       <AnimeList text="Trending" endpoint="trending?perPage=30" />

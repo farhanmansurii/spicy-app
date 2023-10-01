@@ -8,7 +8,7 @@ export default async function EpisodeContainer(props: any) {
   );
 
   return (
-    <div className="mx-auto w-[94%]">
+    <div className="mx-auto w-11/12">
       <EpisodePaginated
         episodes={episodes}
         animeTitle={props.animeTitle}
