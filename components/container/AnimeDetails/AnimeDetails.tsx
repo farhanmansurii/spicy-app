@@ -41,7 +41,7 @@ const Animedetails = (props: any) => {
               <div className="flex flex-row  gap-4 ">
                 <div className="flex flex-col  justify-center gap-2">
                   <div className="flex  gap-4  items-center">
-                    <h1 className=" text-4xl capitalize font-bold  lg:text-5xl">
+                    <h1 className=" text-3xl capitalize font-semibold  lg:text-4xl">
                       {props.data.title.userPreferred ||
                         props.data.title.english ||
                         props.data.title.romaji ||
