@@ -70,9 +70,9 @@ export default function EpisodeList(props: EpisodeListProps) {
   };
   return (
     <div>
-      {selectedEp && links?.sources?.length > 0 ? (
+     {selectedEp && links?.sources?.length > 0 ? (
         <OPlayer
-          key={selectedEp.id}
+          key={selectedEp.id} // This key will force OPlayer to remount
           episode={selectedEp}
           sources={links.sources}
           subtitles={links.subtitles}
