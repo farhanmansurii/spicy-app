@@ -11,6 +11,7 @@
   "dependencies": {
     "@oplayer/core": "^1.2.31",
     "@oplayer/hls": "^1.2.23",
+    "@oplayer/plugins": "^1.0.7",
     "@oplayer/ui": "^1.2.32",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-select": "^1.2.2",
