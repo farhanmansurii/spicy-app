@@ -25,7 +25,7 @@ export default function OPlayer({
   );
   const titleToDisplay = title !== "Full" ? `E${episode.number} ${title}` : "";
 
-  const subtitlesList = subtitles.map((subtitle, index) => ({
+  const subtitlesList = englishSubtitles.map((subtitle, index) => ({
     src: subtitle.url,
     default: index === 0,
     name: subtitle.lang,
@@ -67,7 +67,7 @@ export default function OPlayer({
       </svg>`,
       },
     }),
-    OHls(), chromecast,
+    OHls(), 
   ];
 
   useEffect(() => {
