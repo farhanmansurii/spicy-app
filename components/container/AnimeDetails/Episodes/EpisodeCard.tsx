@@ -22,11 +22,13 @@ export default function EpisodeCard(props: EpisodeCardProps) {
     <div
       key={episode.id}
       onClick={() => active(episode)}
-      className={`episode-card flex-none rounded relative w-full aspect-video ${
-        activeID === episode.id ? "border-red-500 border-2" : ""
+      className={`episode-card flex-none relative w-full aspect-video ${
+        activeID === episode.id
+          ? " border border-primary "
+          : "border border-transparent hover:border-primary "
       }`}
     >
-      <div className="overlay absolute inset-0 rounded bg-[#111111]/70 hover:bg-[#111111]/50 group-hover:bg-opacity-70"></div>
+      <div className="overlay absolute inset-0  bg-background/50 hover:bg-background/50 group-hover:bg-opacity-70"></div>
       <div className="episode-img-container rounded w-full h-full overflow-hidden">
         <img
           className="w-full h-full object-cover"
@@ -36,9 +38,19 @@ export default function EpisodeCard(props: EpisodeCardProps) {
       </div>
 
       <div className="episode-info absolute text-left bottom-2 w-full px-4">
-        <div className="text-[12px] w-fit lg:text-md bg-primary/80 text-white px-2 mb-1  py-[2px] rounded">
+       <div className="flex gap-2"> 
+
+        <div  className="bg-primary/80 px-2 text-xs py-1 rounded w-fit">
           E{episode?.number}
         </div>
+        {activeID === episode.id ? (
+          <div className="bg-primary/80 px-2 text-xs py-1 rounded w-fit">
+            Now Playing
+          </div>
+        ) : (
+          ""
+          )}
+          </div>
         <h3 className="text-xs lg:text-lg line-clamp-2">
           {episode?.title !== "Full" ? episode?.title : ""}
         </h3>

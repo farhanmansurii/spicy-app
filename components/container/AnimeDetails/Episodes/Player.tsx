@@ -40,7 +40,7 @@ export default function OPlayer({
       pictureInPicture: false,
       showControls: "always",
       settings: ["loop"],
-      theme: { primaryColor: "#DC2627" },
+      theme: { primaryColor: '#e11d48' },
       speeds: ["2.0", "1.75", "1.25", "1.0", "0.75", "0.5"],
       slideToSeek: "none",
       controlBar: { back: "always" },
@@ -50,12 +50,6 @@ export default function OPlayer({
         background: true,
       },
       icons: {
-        next: ` <svg fill="none" viewBox="0 0 15 15" height="2em" width="1em" >
-        <path
-          fill="currentColor"
-          d="M4.748 5.066A.5.5 0 004 5.5v4a.5.5 0 00.748.434l3.5-2a.5.5 0 000-.868l-3.5-2zM10 10h1V5h-1v5z"
-        />
-      </svg>`,
         play: `<svg
         viewBox="0 0 24 24"
         fill="currentColor"

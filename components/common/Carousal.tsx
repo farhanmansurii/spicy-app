@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default async function Carousal() {
   const res = await fetchData("trending");
-  const data = res.results[9];
+  const data = res?.results[9];
   return (
     <div className="relative h-[400px]">
       <div className="absolute inset-0 bottom-0 bg-gradient-to-t from-background to-transparent" />

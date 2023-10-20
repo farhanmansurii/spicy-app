@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { SearchBar } from "./SearchBar";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { ThemeChanger } from "./ThemeChanger";
 
 export default function Navbar({ text = "SpicyAnime" }) {
   return (
@@ -22,6 +23,7 @@ export default function Navbar({ text = "SpicyAnime" }) {
         ) : (
           <Link href="">{text} </Link>
         )}
+
         <SearchBar />
       </div>
     </div>
