@@ -4,7 +4,7 @@ import EpisodePaginated from "./EpisodePaginated";
 
 export default async function EpisodeContainer(props: any) {
   const episodes = await fetchData(
-    `episodes/${props.id}?provider=zoro&fetchFiller=true`
+    `episodes/${props.id}?provider=gogoanime&fetchFiller=true`
   );
 
   return (

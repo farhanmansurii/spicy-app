@@ -3,6 +3,8 @@ import React, { useEffect, useRef } from "react";
 import Player from "@oplayer/core";
 import OUI from "@oplayer/ui";
 import OHls from "@oplayer/hls";
+import { calculateTimeFromPercentage } from "@/utils/helper";
+import useAnimeStore from "@/store/animeStore";
 type Ctx = {
   ui: ReturnType<typeof OUI>;
   hls: ReturnType<typeof OHls>;
@@ -10,26 +12,19 @@ type Ctx = {
 
 export default function OPlayer({
   sources,
-  subtitles,
   episode,
+  animeID
 }: {
   sources: any;
-  subtitles: any[];
   episode: Episode;
+  animeID:string
 }) {
   const playerRef = useRef<Player<Ctx>>();
   const { image, title } = episode;
-  const englishSubtitles = subtitles.filter(
-    (subtitle) => subtitle.lang.toLowerCase() === "english"
-  );
-  const titleToDisplay = title !== "Full" ? `E${episode.number} ${title}` : "";
+  const titleToDisplay =
+    title !== "Full" ? `E${episode.number} ${title ? title : ""}` : "";
 
-  const subtitlesList = englishSubtitles.map((subtitle, index) => ({
-    src: subtitle.url,
-    default: index === 0,
-    name: subtitle.lang,
-  }));
-
+  const { recentlyWatched, updateTimeWatched } = useAnimeStore();
   const plugins = [
     OUI({
       fullscreen: true,
@@ -39,8 +34,7 @@ export default function OPlayer({
       screenshot: false,
       pictureInPicture: false,
       showControls: "always",
-      settings: ["loop"],
-      theme: { primaryColor: '#e11d48' },
+      theme: { primaryColor: "#e11d48" },
       speeds: ["2.0", "1.75", "1.25", "1.0", "0.75", "0.5"],
       slideToSeek: "none",
       controlBar: { back: "always" },
@@ -49,6 +43,32 @@ export default function OPlayer({
         fontSize: 20,
         background: true,
       },
+      settings: [
+        "loop",
+        {
+          name: "Quality",
+          key: "KEY",
+          type: "selector", // or 'switcher'
+
+          icon: ` <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+         className='w-7 h-7 '
+          >
+            <path d="M14.5 13.5h2v-3h-2M18 14a1 1 0 01-1 1h-.75v1.5h-1.5V15H14a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1m-7 5H9.5v-2h-2v2H6V9h1.5v2.5h2V9H11m8-5H5c-1.11 0-2 .89-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2z" />
+          </svg>`,
+          children: sources.map((source: any) => ({
+            name: source.quality,
+            value: source.url,
+            default: source.quality === "default",
+          })),
+          onChange({ value }) {
+            const oplayer = playerRef.current;
+            if (!oplayer) return;
+            oplayer.changeSource({ src: value, poster: image, title });
+          },
+        },
+      ],
       icons: {
         play: `<svg
         viewBox="0 0 24 24"
@@ -60,7 +80,7 @@ export default function OPlayer({
       </svg>`,
       },
     }),
-    OHls(), 
+    OHls(),
   ];
 
   useEffect(() => {
@@ -101,9 +121,52 @@ export default function OPlayer({
         poster: image,
         title: titleToDisplay,
       })
-      .then(() => oplayer.context.ui.subtitle.changeSource(subtitlesList))
       .catch((err) => console.log(err));
-  }, [sources, subtitles]);
+
+    const ep = recentlyWatched.find((epi: any) => epi?.animeID === animeID);
+    console.log(ep?.time)
+    if (ep && ep.time) {
+      oplayer.on("loadedmetadata", () => {
+        const calculatedTime = calculateTimeFromPercentage(
+          ep.time,
+          oplayer?.duration
+        );
+        if (calculatedTime) {
+          oplayer.seek(calculatedTime);
+          oplayer.context.ui.changHighlightSource([
+            {
+              time: calculatedTime,
+              text: "Continue Watching",
+            },
+          ]);
+        }
+      });
+    }
+  }, [sources]);
+
+  const watchTimeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  useEffect(() => {
+    const handleTimeUpdate = () => {
+      clearTimeout(watchTimeTimeoutRef.current!); // Clear previous timeout (if any)
+      watchTimeTimeoutRef.current = setTimeout(() => {
+        if (playerRef.current) {
+          const currentTime = playerRef.current.currentTime;
+          const totalTime = playerRef.current.duration;
+          const watchTimePercent = Math.floor((currentTime / totalTime) * 100);
+            (episode.id, watchTimePercent);
+        }
+      }, 500);
+    };
+    if (playerRef.current) {
+      playerRef.current?.on("timeupdate", handleTimeUpdate);
+    }
+
+    return () => {
+      if (watchTimeTimeoutRef.current) {
+        clearTimeout(watchTimeTimeoutRef.current);
+      }
+    };
+  }, [playerRef]);
 
   return (
     <div

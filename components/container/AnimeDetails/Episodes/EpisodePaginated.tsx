@@ -32,9 +32,7 @@ export default function EpisodeList(props: EpisodeListProps) {
     start: 0,
     end: 25,
   });
-
-  const totalEpisodes = episodes.length;
-
+  const totalEpisodes = episodes?.length;
   const toggleEP = async (ep: Episode) => {
     setSelectedEp(ep);
     if (ep?.number > 1) handleAddToRecentlyWatched(ep);
@@ -66,7 +64,7 @@ export default function EpisodeList(props: EpisodeListProps) {
   }, [episodes]);
 
   const handleAddToRecentlyWatched = (anime: Episode) => {
-    addToRecentlyWatched({ animeID, animeTitle, ...anime });
+    addToRecentlyWatched({ animeID, animeTitle, ...anime  });
   };
   return (
     <div>
@@ -74,8 +72,8 @@ export default function EpisodeList(props: EpisodeListProps) {
         <OPlayer
           key={selectedEp.id} // This key will force OPlayer to remount
           episode={selectedEp}
+          animeID={animeID}
           sources={links.sources}
-          subtitles={links.subtitles}
         />
       ) : (
         <div className="aspect-video  w-full lg:w-[600px]  mx-auto my-10 flex justify-center items-center text-center">

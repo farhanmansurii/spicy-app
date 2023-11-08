@@ -13,11 +13,12 @@ export async function fetchData(endpoint: string) {
 export async function fetchLinks(id: string) {
   try {
     const response = await fetch(
-      `https://spicy-api.vercel.app/anime/zoro/watch?episodeId=${id}&server=vidstreaming`,
+      `https://spicy-api.vercel.app/meta/anilist/watch/${id}`,
       { cache: "no-cache" }
     );
     if (!response.ok) throw new Error("Failed to fetch data");
     const data = await response.json();
+    console.log(data)
     return data;
   } catch (error) {
     console.log(error);
@@ -38,4 +39,19 @@ export function formatNextAiringEpisode(nextAiringEpisode: any) {
       ? `${daysRemaining} ${dayLabel}`
       : `${hoursRemaining} ${hourLabel}`;
   return `${relativeTime} until Episode ${nextAiringEpisode.episode} `;
+}
+export function calculateTimeFromPercentage(
+  percentage: number,
+  totalTime: number | undefined
+): number | null {
+  if (
+    totalTime &&
+    !isNaN(totalTime) &&
+    percentage >= 0 &&
+    percentage <= 100
+  ) {
+    return (percentage / 100) * totalTime;
+  } else {
+    return null; 
+  }
 }

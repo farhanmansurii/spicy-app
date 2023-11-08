@@ -13,14 +13,22 @@ interface AnimeStore {
   addToRecentlySearched: (anime: Anime) => void;
   loadRecentlyWatched: () => void;
   loadRecentlySearched: () => void;
+  updateTimeWatched: (episodeId: string, timeWatched: number) => void;
 }
 
 const useAnimeStore = create<AnimeStore>((set) => ({
-recentlyWatched: [],
+  recentlyWatched: [],
   recentlySearched: [],
-  addToRecentlyWatched: async (anime) => {
-    await addRecentlyWatched(anime);
-    set((state) => ({ recentlyWatched: [anime, ...state.recentlyWatched] }));
+  addToRecentlyWatched: async (anime: Episode) => {
+    set((state: AnimeStore) => {
+      const exists = state.recentlyWatched.some(
+        (a) => a.animeID === anime.animeID
+      );
+      if (!exists) {
+        addRecentlyWatched({ ...anime, time: 0 });
+        return { recentlyWatched: [anime, ...state.recentlyWatched] };
+      } else return state;
+    });
   },
   addToRecentlySearched: async (anime) => {
     await addRecentlySearched(anime);
@@ -33,6 +41,17 @@ recentlyWatched: [],
   loadRecentlySearched: async () => {
     const recentlySearched = await getRecentlySearched();
     set({ recentlySearched });
+  },
+  updateTimeWatched: (episodeId, timeWatched) => {
+    set((state) => {
+      const updatedRecentlyWatched = state.recentlyWatched.map((anime) => {
+        if (anime.animeID === episodeId) {
+          return { ...anime, time: timeWatched };
+        }
+        return anime;
+      });
+      return { recentlyWatched: updatedRecentlyWatched };
+    });
   },
 }));
 

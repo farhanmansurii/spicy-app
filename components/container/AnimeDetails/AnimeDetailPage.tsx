@@ -3,9 +3,13 @@ import React from "react";
 import Animedetails from "./AnimeDetails";
 import EpisodeContainer from "./Episodes/EpisodeContainer";
 import Navbar from "@/components/common/Navbar";
-import Row from "@/components/common/Row";
 import AnimeDetailsSkeleton from "@/components/common/AnimeDetailsSkeleton";
-
+import dynamic from "next/dynamic";
+import RowSkeleton from "@/components/common/loaders/RowLoader";
+const Row = dynamic(() => import("../../common/Row"), {
+  ssr: false,
+  loading: () => <RowSkeleton />,
+});
 interface AnimeDetailPageProps {
   id: string;
 }
@@ -25,7 +29,7 @@ export default async function AnimeDetailPage(props: AnimeDetailPageProps) {
         id={props.id}
         fetchFiller={true}
       />
-      <div className="flex gap-2 lg:mt-[4rem] flex-col">
+      <div className="flex gap-10 my-10 lg:mt-[4rem] flex-col">
         <Row text="Recommended" typeOfAnime={data.recommendations} />
         <Row
           text="Similar"

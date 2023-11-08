@@ -21,4 +21,5 @@ interface Episode {
   title?: string;
   number: number;
   description?: string;
+  time:number
 }

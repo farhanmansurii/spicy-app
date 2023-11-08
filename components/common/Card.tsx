@@ -5,6 +5,7 @@ function AnimeCard(props: any) {
       <img
         className="object-cover w-[100%] opacity-60 h-[99%]"
         src={animeImg}
+        loading="lazy"
         alt={title}
       />
       <div className="absolute opacity inset-0 bg-gradient-to-t flex flex-col-reverse duration-150 p-3">
