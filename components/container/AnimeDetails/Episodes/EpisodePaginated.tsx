@@ -1,11 +1,12 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import EpisodeCard from "./EpisodeCard";
-import OPlayer from "./Player";
-import EpisodeRangeSelector from "./EpisodeRangeSelector";
-import { fetchLinks } from "@/utils/helper";
-import { Skeleton } from "@/components/ui/skeleton";
-import useAnimeStore from "@/store/animeStore";
+/* eslint-disable react-hooks/exhaustive-deps */
+'use client';
+import React, { useEffect, useState } from 'react';
+import EpisodeCard from './EpisodeCard';
+import OPlayer from './Player';
+import EpisodeRangeSelector from './EpisodeRangeSelector';
+import { fetchLinks } from '@/utils/helper';
+import { Skeleton } from '@/components/ui/skeleton';
+import useAnimeStore from '@/store/animeStore';
 
 interface EpisodeListProps {
   episodes: Episode[];
@@ -40,12 +41,12 @@ export default function EpisodeList(props: EpisodeListProps) {
       const link = await fetchLinks(ep.id);
       setLinks(link);
     } catch (error) {
-      console.log("Error fetching links:", error);
+      console.log('Error fetching links:', error);
     }
   };
 
   const handleRangeChange = (newRange: string) => {
-    const [start, end] = newRange.split("-");
+    const [start, end] = newRange.split('-');
     setRange({
       start: parseInt(start) - 1,
       end: parseInt(end),
@@ -61,14 +62,14 @@ export default function EpisodeList(props: EpisodeListProps) {
     if (animeInRecentlyWatched)
       toggleEP(episodes[animeInRecentlyWatched.number - 1]);
     else toggleEP(episodes[0]);
-  }, [episodes]);
+  }, [animeInRecentlyWatched, episodes, toggleEP]);
 
   const handleAddToRecentlyWatched = (anime: Episode) => {
-    addToRecentlyWatched({ animeID, animeTitle, ...anime  });
+    addToRecentlyWatched({ animeID, animeTitle, ...anime });
   };
   return (
     <div>
-     {selectedEp && links?.sources?.length > 0 ? (
+      {selectedEp && links?.sources?.length > 0 ? (
         <OPlayer
           key={selectedEp.id} // This key will force OPlayer to remount
           episode={selectedEp}

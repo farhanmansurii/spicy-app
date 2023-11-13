@@ -1,14 +1,14 @@
-"use client";
-import useAnimeStore from "@/store/animeStore";
-import Link from "next/link";
-import React, { useEffect, useRef } from "react";
-import { Button } from "./ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+'use client';
+import useAnimeStore from '@/store/animeStore';
+import Link from 'next/link';
+import React, { useEffect, useRef } from 'react';
+import { Button } from './ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function RecentlyWatched() {
   const { recentlyWatched, loadRecentlyWatched } = useAnimeStore();
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-console.log(recentlyWatched)
+  console.log(recentlyWatched);
   const scrollTo = (scrollOffset: number) => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
@@ -16,13 +16,13 @@ console.log(recentlyWatched)
       const targetScrollLeft = currentScrollLeft + scrollOffset;
       container.scrollTo({
         left: targetScrollLeft,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   };
   useEffect(() => {
     loadRecentlyWatched();
-  }, []);
+  }, [loadRecentlyWatched]);
   return (
     recentlyWatched.length > 0 && (
       <div className="w-11/12 mx-auto my-10">
@@ -32,30 +32,30 @@ console.log(recentlyWatched)
         >
           <h2 className="text-2xl lg:text-3xl my-2 mx-2">Continue Watching</h2>
           <div className="flex gap-3">
-          <Button
-          size='sm'
-            onClick={() => scrollTo(-400)}
-            className=" rounded-full w-8 h-8 p-2"
-          >
-            <ChevronLeft />
-          </Button>
-          <Button
-            size='sm'
-            onClick={() => scrollTo(400)}
-            className=" rounded-full w-8 h-8 p-2"
-          >
-            <ChevronRight />
-          </Button>
-        </div>
+            <Button
+              size="sm"
+              onClick={() => scrollTo(-400)}
+              className=" rounded-full w-8 h-8 p-2"
+            >
+              <ChevronLeft />
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => scrollTo(400)}
+              className=" rounded-full w-8 h-8 p-2"
+            >
+              <ChevronRight />
+            </Button>
+          </div>
         </div>
         <div
-        ref={scrollContainerRef}
+          ref={scrollContainerRef}
           style={{
-            display: "flex",
-            overflowX: "scroll",
-            gap: "2px",
-            scrollbarWidth: "none",
-            WebkitOverflowScrolling: "touch",
+            display: 'flex',
+            overflowX: 'scroll',
+            gap: '2px',
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch',
           }}
         >
           {recentlyWatched.map((episode) => (

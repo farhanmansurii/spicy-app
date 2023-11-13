@@ -19,6 +19,7 @@ export default function OPlayer({
   episode: Episode;
   animeID:string
 }) {
+  console.log('🚀 ~ file: Player.tsx:22 ~ sources:', sources);
   const playerRef = useRef<Player<Ctx>>();
   const { image, title } = episode;
   const titleToDisplay =

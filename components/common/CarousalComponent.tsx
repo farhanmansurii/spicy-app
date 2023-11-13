@@ -1,17 +1,18 @@
-"use client";
-import React, { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+/* eslint-disable @next/next/no-img-element */
+'use client';
+import React, { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/react';
 import 'swiper/css';
-import "swiper/css/pagination";
-import { EffectCoverflow, Pagination } from "swiper/modules";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import SwiperCore from "swiper";
-import { Button } from "../ui/button";
-import { Play, Plus } from "lucide-react";
-import Link from "next/link";
-import { SearchBar } from "./SearchBar";
+import 'swiper/css/pagination';
+import { EffectCoverflow, Pagination } from 'swiper/modules';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import SwiperCore from 'swiper';
+import { Button } from '../ui/button';
+import { Play, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { SearchBar } from './SearchBar';
 SwiperCore.use([Pagination]);
 
 export default function CarousalComponent(props: any) {
@@ -30,7 +31,7 @@ export default function CarousalComponent(props: any) {
           </div>
         </div>
         <Swiper
-          effect={""}
+          effect={''}
           grabCursor={true}
           centeredSlides={true}
           autoplay={true}
@@ -38,53 +39,66 @@ export default function CarousalComponent(props: any) {
           spaceBetween={2} // Add space between slides
           mousewheel={true}
           initialSlide={1}
-          style={{ paddingBlock: "4rem" }}
+          style={{ paddingBlock: '4rem' }}
           className=""
           onSlideChange={handleSlideChange}
         >
           {props.items?.map((show: any, index: any) => (
-            <SwiperSlide key={index}  >
-              <div className="md:hidden relative h-96 w-full">
-                <img
-                  src={show.image}
-                  className="w-full h-full object-cover rounded-xl"
-                  alt=""
-                />
-                <div
-                  className={`absolute inset-0 duration-400 ${
-                    activeSlide === index
-                      ? "shadow-neutral-900 shadow-2xl rounded-lg"
-                      : "bg-background opacity-70"
-                  }`}
-                ></div>
-                {activeSlide === index ? (
-                  <div className="flex gap-2 absolute inset-0 justify-center items-center">
-                    <Link href={`/movie/${show.id}`}>
-                      <Button className="rounded-full shadow-2xl shadow-primary w-12 h-12 gap-2">
-                        <Play />
-                      </Button>
-                    </Link>
+            <SwiperSlide key={index}>
+              <Link href={show.id}>
+                <div className="md:hidden relative h-96 w-full">
+                  <img
+                    src={show.image}
+                    className="w-full h-full object-cover rounded-xl"
+                    alt=""
+                  />
+                  <div
+                    className={`absolute inset-0 duration-400 ${
+                      activeSlide === index
+                        ? 'shadow-neutral-900 shadow-2xl rounded-lg'
+                        : 'bg-background opacity-70'
+                    }`}
+                  ></div>
+                  {activeSlide === index ? (
+                    <div className="flex gap-2 absolute inset-0 justify-center items-center">
+                      <Link href={`/${show.id}`}>
+                        <Button className="rounded-full shadow-2xl shadow-primary w-12 h-12 gap-2">
+                          <Play />
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                </div>
+                <div className="hidden md:block relative h-full w-full">
+                  <img
+                    src={show.cover}
+                    className={`w-full h-full aspect-video object-cover rounded-xl`}
+                    alt=""
+                  />
+                  <div
+                    className={`absolute inset-0 flex justify-between flex-col ${
+                      activeSlide === index
+                        ? 'bg-gradient-to-t shadow-neutral-900 shadow-2xl rounded-xl from-background to-transparent'
+                        : 'bg-background opacity-70'
+                    }`}
+                  >
+                    <div></div>
+                    {activeSlide === index && (
+                      <div className="p-4  text-lg capitalize">
+                        <div>
+                          <div>{show?.title.english}</div>
+                          <button className="bg-primary px-3  rounded-full text-[10px] ">
+                            Watch
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  ""
-                )}
-              </div>
-
-              <div className="hidden md:block relative h-full w-full">
-                <img
-                  src={show.cover}
-                  className={`w-full h-full aspect-video object-cover rounded-xl`}
-                  alt=""
-                />
-                <div
-                  className={`absolute inset-0 ${
-                    activeSlide === index
-                      ? "bg-gradient-to-t shadow-neutral-900 shadow-2xl rounded-xl from-background to-transparent"
-                      : "bg-background opacity-70"
-                  }`}
-                ></div>
-                {activeSlide === index ? "" : ""}
-              </div>
+                  {activeSlide === index ? '' : ''}
+                </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

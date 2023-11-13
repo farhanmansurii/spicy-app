@@ -16,8 +16,10 @@ export async function fetchLinks(id: string) {
       `https://spicy-api.vercel.app/meta/anilist/watch/${id}`,
       { cache: "no-cache" }
     );
+    
     if (!response.ok) throw new Error("Failed to fetch data");
     const data = await response.json();
+    
     console.log(data)
     return data;
   } catch (error) {
