@@ -24,8 +24,9 @@ export default async function AnimeDetailPage(props: AnimeDetailPageProps) {
           data.title.userPreferred ||
           data.title.english ||
           data.title.romaji ||
-          ""
+          ''
         }
+        malId={data.malId || ''}
         id={props.id}
         fetchFiller={true}
       />
@@ -35,8 +36,8 @@ export default async function AnimeDetailPage(props: AnimeDetailPageProps) {
           text="Similar"
           typeOfAnime={data.relations.filter(
             (relation: any) =>
-              relation?.type?.toLowerCase() === "tv" ||
-              relation?.type?.toLowerCase() === "movie"
+              relation?.type?.toLowerCase() === 'tv' ||
+              relation?.type?.toLowerCase() === 'movie'
           )}
         />
       </div>

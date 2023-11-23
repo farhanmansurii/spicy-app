@@ -10,6 +10,7 @@ export default async function EpisodeContainer(props: any) {
   return (
     <div className="mx-auto w-11/12">
       <EpisodePaginated
+        malId={props.malId}
         episodes={episodes}
         animeTitle={props.animeTitle}
         animeID={props.id}

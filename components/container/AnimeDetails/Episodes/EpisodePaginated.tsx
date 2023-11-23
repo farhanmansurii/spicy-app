@@ -10,6 +10,7 @@ import useAnimeStore from '@/store/animeStore';
 
 interface EpisodeListProps {
   episodes: Episode[];
+  malId: Number;
   animeID: string;
   animeTitle: string;
 }
@@ -19,7 +20,7 @@ interface Range {
 }
 
 export default function EpisodeList(props: EpisodeListProps) {
-  const { episodes, animeID, animeTitle } = props;
+  const { episodes, animeID, animeTitle, malId } = props;
   const [selectedEp, setSelectedEp] = useState<Episode | null>(null);
   const [links, setLinks] = useState<{
     sources: string[];
@@ -62,7 +63,7 @@ export default function EpisodeList(props: EpisodeListProps) {
     if (animeInRecentlyWatched)
       toggleEP(episodes[animeInRecentlyWatched.number - 1]);
     else toggleEP(episodes[0]);
-  }, [animeInRecentlyWatched, episodes, toggleEP]);
+  }, []);
 
   const handleAddToRecentlyWatched = (anime: Episode) => {
     addToRecentlyWatched({ animeID, animeTitle, ...anime });
@@ -71,7 +72,7 @@ export default function EpisodeList(props: EpisodeListProps) {
     <div>
       {selectedEp && links?.sources?.length > 0 ? (
         <OPlayer
-          key={selectedEp.id} // This key will force OPlayer to remount
+          malId={malId}
           episode={selectedEp}
           animeID={animeID}
           sources={links.sources}
