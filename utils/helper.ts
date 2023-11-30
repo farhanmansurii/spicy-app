@@ -1,4 +1,4 @@
-const baseUrl = "https://spicy-api.vercel.app/meta/anilist/";
+const baseUrl = "https://apispicy.vercel.app/meta/anilist/";
 export async function fetchData(endpoint: string) {
   try {
     const url = new URL(endpoint, baseUrl);
@@ -13,7 +13,7 @@ export async function fetchData(endpoint: string) {
 export async function fetchLinks(id: string) {
   try {
     const response = await fetch(
-      `https://spicy-api.vercel.app/meta/anilist/watch/${id}`,
+      `https://apispicy.vercel.app/meta/anilist/watch/${id}`,
       { cache: "no-cache" }
     );
     
