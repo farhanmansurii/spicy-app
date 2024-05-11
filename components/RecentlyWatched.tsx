@@ -8,7 +8,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 export default function RecentlyWatched() {
   const { recentlyWatched, loadRecentlyWatched } = useAnimeStore();
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  console.log(recentlyWatched);
   const scrollTo = (scrollOffset: number) => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;

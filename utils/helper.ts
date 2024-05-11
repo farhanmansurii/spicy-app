@@ -1,4 +1,4 @@
-const baseUrl = "https://apispicy.vercel.app/meta/anilist/";
+const baseUrl = "https://api-spicy.vercel.app/meta/anilist/";
 export async function fetchData(endpoint: string) {
   try {
     const url = new URL(endpoint, baseUrl);
@@ -13,14 +13,12 @@ export async function fetchData(endpoint: string) {
 export async function fetchLinks(id: string) {
   try {
     const response = await fetch(
-      `https://apispicy.vercel.app/meta/anilist/watch/${id}`,
+      `https://api-spicy.vercel.app/meta/anilist/watch/${id}`,
       { cache: "no-cache" }
     );
-    
+
     if (!response.ok) throw new Error("Failed to fetch data");
     const data = await response.json();
-    
-    console.log(data)
     return data;
   } catch (error) {
     console.log(error);
@@ -54,6 +52,6 @@ export function calculateTimeFromPercentage(
   ) {
     return (percentage / 100) * totalTime;
   } else {
-    return null; 
+    return null;
   }
 }
